@@ -1,24 +1,48 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+// Importamos las vistas
+import ConsultarEstudiantes from '../components/ConsultarEstudiantes.vue'
+import ConsultarEstudiantePorId from '../components/ConsultarEstudiantePorId.vue'
+import CrearEstudiante from '../components/CrearEstudiante.vue'
+import ActualizarEstudiante from '../components/ActualizarEstudiante.vue'
+import ActualizacionParcial from '../components/ActualizacionParcial.vue'
+import EliminarEstudiante from '../components/EliminarEstudiante.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'consultar',
+    component: ConsultarEstudiantes
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/consultar-id',
+    name: 'consultar-id',
+    component: ConsultarEstudiantePorId
+  },
+  {
+    path: '/crear',
+    name: 'crear',
+    component: CrearEstudiante
+  },
+  {
+    path: '/actualizar',
+    name: 'actualizar',
+    component: ActualizarEstudiante
+  },
+  {
+    path: '/actualizar-parcial',
+    name: 'actualizar-parcial',
+    component: ActualizacionParcial
+  },
+  {
+    path: '/eliminar',
+    name: 'eliminar',
+    component: EliminarEstudiante
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 
