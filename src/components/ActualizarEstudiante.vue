@@ -5,6 +5,9 @@
     <input type="number" v-model="id" placeholder="ID" />
     <input v-model="nombre" placeholder="Nombre" />
     <input v-model="apellido" placeholder="Apellido" />
+    <input type="date" v-model="fechaNacimiento" />
+    <input v-model="provincia" placeholder="Provincia" />
+    <input v-model="genero" placeholder="Genero" />
 
     <button @click="actualizar">Actualizar</button>
   </div>
@@ -25,7 +28,10 @@ export default {
     async actualizar() {
       const body = {
         nombre: this.nombre,
-        apellido: this.apellido
+        apellido: this.apellido,
+        fechaNacimiento: this.fechaNacimiento,
+        provincia: this.provincia,
+        genero: this.genero
       }
       await actualizarFacade(this.id, body)
       alert("Actualizado correctamente")
