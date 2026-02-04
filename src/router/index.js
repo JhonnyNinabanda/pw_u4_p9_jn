@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Importamos las vistas
+// Vistas
+import Login from '../components/Login.vue'
 import ConsultarEstudiantes from '../components/ConsultarEstudiantes.vue'
 import ConsultarEstudiantePorId from '../components/ConsultarEstudiantePorId.vue'
 import CrearEstudiante from '../components/CrearEstudiante.vue'
@@ -10,40 +11,57 @@ import EliminarEstudiante from '../components/EliminarEstudiante.vue'
 
 const routes = [
   {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
     path: '/',
     name: 'consultar',
-    component: ConsultarEstudiantes
+    component: ConsultarEstudiantes,
+    meta: { requiresAuth: true }
   },
   {
     path: '/consultar-id',
-    name: 'consultar-id',
-    component: ConsultarEstudiantePorId
+    component: ConsultarEstudiantePorId,
+    meta: { requiresAuth: true }
   },
   {
     path: '/crear',
-    name: 'crear',
-    component: CrearEstudiante
+    component: CrearEstudiante,
+    meta: { requiresAuth: true }
   },
   {
     path: '/actualizar',
-    name: 'actualizar',
-    component: ActualizarEstudiante
+    component: ActualizarEstudiante,
+    meta: { requiresAuth: true }
   },
   {
     path: '/actualizar-parcial',
-    name: 'actualizar-parcial',
-    component: ActualizacionParcial
+    component: ActualizacionParcial,
+    meta: { requiresAuth: true }
   },
   {
     path: '/eliminar',
-    name: 'eliminar',
-    component: EliminarEstudiante
+    component: EliminarEstudiante,
+    meta: { requiresAuth: true }
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// 🔐 GUARD DE AUTENTICACIÓN
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token")
+
+  if (to.meta.requiresAuth && !token) {
+    next("/login")
+  } else {
+    next()
+  }
 })
 
 export default router

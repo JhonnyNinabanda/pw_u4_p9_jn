@@ -1,27 +1,51 @@
 <template>
   <div>
     <nav class="tabs">
-      <router-link to="/" class="tab" exact-active-class="active">
+      <router-link
+        to="/"
+        class="tab"
+        :class="{ active: $route.path === '/' }"
+      >
         Consultar
       </router-link>
 
-      <router-link to="/consultar-id" class="tab" exact-active-class="active">
+      <router-link
+        to="/consultar-id"
+        class="tab"
+        :class="{ active: $route.path === '/consultar-id' }"
+      >
         Consultar por ID
       </router-link>
 
-      <router-link to="/crear" class="tab" exact-active-class="active">
+      <router-link
+        to="/crear"
+        class="tab"
+        :class="{ active: $route.path === '/crear' }"
+      >
         Crear
       </router-link>
 
-      <router-link to="/actualizar" class="tab" exact-active-class="active">
+      <router-link
+        to="/actualizar"
+        class="tab"
+        :class="{ active: $route.path === '/actualizar' }"
+      >
         Actualizar
       </router-link>
 
-      <router-link to="/actualizar-parcial" class="tab" exact-active-class="active">
+      <router-link
+        to="/actualizar-parcial"
+        class="tab"
+        :class="{ active: $route.path === '/actualizar-parcial' }"
+      >
         Actualizar Parcial
       </router-link>
 
-      <router-link to="/eliminar" class="tab" exact-active-class="active">
+      <router-link
+        to="/eliminar"
+        class="tab"
+        :class="{ active: $route.path === '/eliminar' }"
+      >
         Eliminar
       </router-link>
     </nav>
@@ -46,14 +70,10 @@
   text-decoration: none;
   border-radius: 8px;
   font-size: 14px;
-  
 }
-
 
 .active {
   background: #dcdce3;
   font-weight: bold;
 }
 </style>
-
-
