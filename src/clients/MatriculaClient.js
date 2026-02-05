@@ -1,12 +1,20 @@
 import axios from "axios";
 
-// Instancia Axios con baseURL
-const api = axios.create({
-  baseURL: "http://localhost:8081/matricula/api/v1.0"
+/* ===========================
+   CONFIGURACIÓN BASE
+=========================== */
+
+const API_URL = "http://localhost:8082";
+
+/* ===========================
+   AXIOS CON TOKEN
+=========================== */
+
+const AuthClient = axios.create({
+  baseURL: API_URL
 });
 
-// Interceptor para enviar el JWT
-api.interceptors.request.use(config => {
+AuthClient.interceptors.request.use(config => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -14,37 +22,46 @@ api.interceptors.request.use(config => {
   return config;
 });
 
-// ======== PETICIONES ========
+/* ===========================
+   LOGIN
+=========================== */
 
-const consultar = () => {
-  return api.get('/estudiantes').then(r => r.data);
+export const loginFacade = async (credentials) => {
+  const res = await axios.post(`${API_URL}/auth/login`, credentials);
+  localStorage.setItem("token", res.data.accessToken);
+  return res.data;
 };
 
-const consultarPorId = (id) => {
-  return api.get(`/estudiantes/${id}`).then(r => r.data);
+/* ===========================
+   ESTUDIANTES
+=========================== */
+
+export const consultarFacade = async () => {
+  const res = await AuthClient.get("/estudiantes");
+  return res.data;
 };
 
-const guardar = (body) => {
-  return api.post('/estudiantes', body).then(r => r.data);
+export const consultaPorIdFacade = async (id) => {
+  const res = await AuthClient.get(`/estudiantes/${id}`);
+  return res.data;
 };
 
-const actualizar = (id, body) => {
-  return api.put(`/estudiantes/${id}`, body).then(r => r.data);
+export const guardarFacade = async (body) => {
+  const res = await AuthClient.post("/estudiantes", body);
+  return res.data;
 };
 
-const actualizarParcial = (id, body) => {
-  return api.patch(`/estudiantes/${id}`, body).then(r => r.data);
+export const actualizarFacade = async (id, body) => {
+  const res = await AuthClient.put(`/estudiantes/${id}`, body);
+  return res.data;
 };
 
-const eliminar = (id) => {
-  return api.delete(`/estudiantes/${id}`).then(r => r.data);
+export const actualizacionParcialFacade = async (id, body) => {
+  const res = await AuthClient.patch(`/estudiantes/${id}`, body);
+  return res.data;
 };
 
-// ======== FACHADAS ========
-
-export const consultarFacade = async () => await consultar();
-export const consultarPorIdFacade = async (id) => await consultarPorId(id);
-export const guardarFacade = async (body) => await guardar(body);
-export const actualizarFacade = async (id, body) => await actualizar(id, body);
-export const actualizarParcialFacade = async (id, body) => await actualizarParcial(id, body);
-export const eliminarFacade = async (id) => await eliminar(id);
+export const eliminarFacade = async (id) => {
+  const res = await AuthClient.delete(`/estudiantes/${id}`);
+  return res.data;
+};

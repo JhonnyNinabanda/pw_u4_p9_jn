@@ -1,11 +1,8 @@
 <template>
   <div>
-    <nav class="tabs">
-      <router-link
-        to="/"
-        class="tab"
-        :class="{ active: $route.path === '/' }"
-      >
+    <!-- Menú solo si NO estamos en login -->
+    <nav v-if="$route.path !== '/login'" class="tabs">
+      <router-link to="/" class="tab" :class="{ active: $route.path === '/' }">
         Consultar
       </router-link>
 
@@ -48,11 +45,25 @@
       >
         Eliminar
       </router-link>
+
+      <button class="tab logout" @click="logout">Salir</button>
     </nav>
 
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  name: "App",
+  methods: {
+    logout() {
+      localStorage.clear()
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
 
 <style>
 .tabs {
@@ -70,6 +81,12 @@
   text-decoration: none;
   border-radius: 8px;
   font-size: 14px;
+  cursor: pointer;
+}
+
+.logout {
+  background: #e53935;
+  color: white;
 }
 
 .active {

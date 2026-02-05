@@ -15,6 +15,7 @@
 import { loginFacade } from "../clients/AuthClient";
 
 export default {
+  name: "Login",
   data() {
     return {
       username: "",
@@ -42,7 +43,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .login-container {
   max-width: 350px;
   margin: 100px auto;
@@ -66,6 +67,7 @@ button {
   color: white;
   border: none;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .error {

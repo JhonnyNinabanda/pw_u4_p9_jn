@@ -1,13 +1,20 @@
 import axios from "axios";
 
-const login = async (credentials) => {
-  const response = await axios.post(
-    "http://localhost:8082/auth/login",
-    credentials
-  );
-  return response.data;
-};
+//Base para todos los endpoints
+const http = axios.create({
+    baseURL: 'http://localhost:8081/matricula/api/v1.0'
+});
 
-export const loginFacade = async (credentials) => {
-  return await login(credentials);
-};
+// Config para Authorization el token
+http.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => Promise.reject(error)
+);
+
+export default http; // Exporta solo este

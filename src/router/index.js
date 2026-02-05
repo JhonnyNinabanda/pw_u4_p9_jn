@@ -53,15 +53,16 @@ const router = createRouter({
   routes
 })
 
-// 🔐 GUARD DE AUTENTICACIÓN
+// GUARD DE SEGURIDAD
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token")
+  const publicPages = ['/login']
+  const authRequired = !publicPages.includes(to.path)
+  const loggedIn = localStorage.getItem('token')
 
-  if (to.meta.requiresAuth && !token) {
-    next("/login")
-  } else {
-    next()
+  if (authRequired && !loggedIn) {
+    return next('/login')
   }
+  next()
 })
 
 export default router
