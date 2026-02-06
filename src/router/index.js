@@ -1,51 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
-
-// Vistas
-import Login from '../components/Login.vue'
-import ConsultarEstudiantes from '../components/ConsultarEstudiantes.vue'
-import ConsultarEstudiantePorId from '../components/ConsultarEstudiantePorId.vue'
-import CrearEstudiante from '../components/CrearEstudiante.vue'
-import ActualizarEstudiante from '../components/ActualizarEstudiante.vue'
-import ActualizacionParcial from '../components/ActualizacionParcial.vue'
-import EliminarEstudiante from '../components/EliminarEstudiante.vue'
+import AboutView from '@/views/AboutComponentView.vue'
+import ActualizarView from '@/views/ActualizarView.vue';
+import CrearView from '@/views/CrearView.vue';
+import ActualizarParcialView from '@/views/ActualizarParcialView.vue';
+import EliminarView from '@/views/EliminarView.vue';
+import consultaPorIdView from '@/views/ConsultaPorIdView.vue';
+// import LoginView from '@/views/LoginView.vue';
+import LoginViews from '@/views/LoginViews.vue'
 
 const routes = [
-  {
-    path: '/login',
-    name: 'login',
-    component: Login
-  },
-  {
-    path: '/',
-    name: 'consultar',
-    component: ConsultarEstudiantes,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/consultar-id',
-    component: ConsultarEstudiantePorId,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/crear',
-    component: CrearEstudiante,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/actualizar',
-    component: ActualizarEstudiante,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/actualizar-parcial',
-    component: ActualizacionParcial,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/eliminar',
-    component: EliminarEstudiante,
-    meta: { requiresAuth: true }
-  }
+  { path: '/login', name: 'login', component: LoginViews},
+  { path: '/', redirect: '/login' }, // Si entran a la raíz, mándalos al login
+  //{ path: '/login', name: 'login', component: LoginView},
+  { path: '/about', name: 'about', component: AboutView, meta:{ requiereAutorizacion: false, esPublica: false} },
+  { path: '/crear', component: CrearView, meta:{ requiereAutorizacion: true, esPublica: false} },
+  { path: '/actualizar', component: ActualizarView, meta:{ requiereAutorizacion: true, esPublica: false} },
+  { path: '/actualizarParcial', component: ActualizarParcialView, meta:{ requiereAutorizacion: false, esPublica: false} },
+  { path: '/eliminar', component: EliminarView, meta:{ requiereAutorizacion: true, esPublica: false} },
+  { path: '/consultarId', component: consultaPorIdView, meta:{ requiereAutorizacion: false, esPublica: false} },
 ]
 
 const router = createRouter({
@@ -53,16 +25,19 @@ const router = createRouter({
   routes
 })
 
-// GUARD DE SEGURIDAD
+/*Configuracion del guardian */
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login']
-  const authRequired = !publicPages.includes(to.path)
-  const loggedIn = localStorage.getItem('token')
+  const requiereAuth = to.meta.requiereAutorizacion;
+  const token = localStorage.getItem('token');
+  const estaAutenticado = localStorage.getItem('estaAutenticado') === 'true';
 
-  if (authRequired && !loggedIn) {
-    return next('/login')
+  if (requiereAuth && (!token || !estaAutenticado)) {
+    console.log('Acceso denegado, redirigiendo a login');
+    next({ name: 'login' });
+  } else {
+    console.log('Pase libre');
+    next();
   }
-  next()
-})
+});
 
 export default router
