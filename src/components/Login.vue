@@ -1,77 +1,59 @@
 <template>
-  <div class="login-container">
-    <h3>Iniciar Sesión</h3>
-
-    <input v-model="username" placeholder="Usuario" />
-    <input v-model="password" type="password" placeholder="Contraseña" />
-
-    <button @click="login">Ingresar</button>
-
-    <p v-if="error" class="error">{{ error }}</p>
+  <div class = "Login">
+    <h2>Login</h2>
+    <input v-model="usuario" type="text" placeholder = "Usuario"> 
+    <input v-model="password"  type="password" placeholder = "Contraseña"> 
+    <button @click="Login">Entrar</button>
+    <p v-if="error" class="error-msg">
+        {{ error }}
+    </p>
   </div>
+
 </template>
 
 <script>
-import { loginFacade } from "../clients/AuthClient";
-
+import { login } from '@/clients/MatriculaClient.js';
 export default {
-  name: "Login",
-  data() {
-    return {
-      username: "",
-      password: "",
-      error: null
-    };
-  },
-  methods: {
-    async login() {
-      try {
-        const resp = await loginFacade({
-          username: this.username,
-          password: this.password
-        });
-
-        localStorage.setItem("token", resp.accessToken);
-        localStorage.setItem("role", resp.role);
-
-        this.$router.push("/");
-      } catch (e) {
-        this.error = "Usuario o contraseña incorrectos";
-      }
+    data(){
+        return{
+            usuario:'',
+            password:'',
+            error: null,
+        };
+    },
+    methods: {
+        async Login() {
+        try {
+            await login(this.usuario, this.password);
+            this.$router.push('/about');
+        } catch (err) {
+            this.error = "Usuario o contraseña incorrectos";
+        }
+        }
     }
-  }
 };
 </script>
 
 <style scoped>
-.login-container {
-  max-width: 350px;
-  margin: 100px auto;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  text-align: center;
+.Login{
+    width: 300px;
+    margin: 100px;
+    padding: 20px;
+    border: 1px solid red;
+    border-radius: 8px;
+    text-align: center;
+    background: greenyellow;
 }
 
 input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+    width: 80%;
+    margin-bottom: 10px;
+    padding: 8px;
 }
 
-button {
-  width: 100%;
-  padding: 10px;
-  background: #3b0aee;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.error {
-  color: red;
-  margin-top: 10px;
+button{
+    width: 80%;
+    padding: 8px;
+    cursor: pointer;
 }
 </style>

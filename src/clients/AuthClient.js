@@ -2,7 +2,7 @@ import axios from "axios";
 
 //Base para todos los endpoints
 const http = axios.create({
-    baseURL: 'http://localhost:8081/matricula/api/v1.0'
+    baseURL: 'http://localhost8081/matricula/api/v1.0'
 });
 
 // Config para Authorization el token
@@ -17,4 +17,4 @@ http.interceptors.request.use(
     error => Promise.reject(error)
 );
 
-export default http; // Exporta solo este
+export default http;

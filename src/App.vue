@@ -1,96 +1,61 @@
 <template>
-  <div>
-    <!-- Menú solo si NO estamos en login -->
-    <nav v-if="$route.path !== '/login'" class="tabs">
-      <router-link to="/" class="tab" :class="{ active: $route.path === '/' }">
-        Consultar
-      </router-link>
-
-      <router-link
-        to="/consultar-id"
-        class="tab"
-        :class="{ active: $route.path === '/consultar-id' }"
-      >
-        Consultar por ID
-      </router-link>
-
-      <router-link
-        to="/crear"
-        class="tab"
-        :class="{ active: $route.path === '/crear' }"
-      >
-        Crear
-      </router-link>
-
-      <router-link
-        to="/actualizar"
-        class="tab"
-        :class="{ active: $route.path === '/actualizar' }"
-      >
-        Actualizar
-      </router-link>
-
-      <router-link
-        to="/actualizar-parcial"
-        class="tab"
-        :class="{ active: $route.path === '/actualizar-parcial' }"
-      >
-        Actualizar Parcial
-      </router-link>
-
-      <router-link
-        to="/eliminar"
-        class="tab"
-        :class="{ active: $route.path === '/eliminar' }"
-      >
-        Eliminar
-      </router-link>
-
-      <button class="tab logout" @click="logout">Salir</button>
+  <div id="app">
+    <nav v-if="$route.path !== '/login'">
+      <router-link to="/about">Inicio / Todos</router-link> |
+      <router-link to="/consultarId">Buscar por ID</router-link> |
+      <router-link to="/crear">Nuevo Estudiante</router-link> |
+      <router-link to="/actualizar">Actualizar Todo</router-link> |
+      <router-link to="/actualizarParcial">Edición Parcial</router-link> |
+      <router-link to="/eliminar">Borrar</router-link> |
+      <a href="#" @click="logout">Salir</a>
     </nav>
 
-    <router-view />
+    <div class="container">
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "App",
   methods: {
     logout() {
-      localStorage.clear()
-      this.$router.push('/login')
+      localStorage.removeItem('token');
+      localStorage.removeItem('estaAutenticado');
+      this.$router.push('/login');      // Volvemos al login
     }
   }
-}
+};
 </script>
 
 <style>
-.tabs {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  background: #1d149b;
-  padding: 15px;
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
 
-.tab {
-  padding: 10px 16px;
-  background: #0774e1;
-  color: rgb(17, 17, 17);
-  text-decoration: none;
+nav {
+  padding: 30px;
+}
+
+.main-container {
+  padding: 20px;
+  border: 1px solid #eee;
+  margin: 0 20px;
   border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
 }
 
-.logout {
-  background: #e53935;
-  color: white;
-}
-
-.active {
-  background: #dcdce3;
+nav a {
   font-weight: bold;
+  color: #2c3e50;
+  margin: 0 10px; /* Separa un poco más los enlaces */
+  text-decoration: none;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
